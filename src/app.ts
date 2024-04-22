@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import { usersRouter } from './routers/users.router';
 import { handleApplicationErrors } from './middlewares/error.handling.middleware';
 import express, { Request, Response } from 'express';
+import { commentsRouter } from 'routers/comments.router';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app
         res.status(httpStatus.OK).send("OK! 🚀");
     })
     .use('/', usersRouter)
+    .use('/', commentsRouter)
     .use(handleApplicationErrors);
 
 export default app;
