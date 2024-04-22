@@ -2,9 +2,10 @@ import cors from 'cors';
 import 'express-async-errors';
 import httpStatus from 'http-status';
 import { usersRouter } from './routers/users.router';
+import { followsRouter } from 'routers/follows.router';
+import { commentsRouter } from 'routers/comments.router';
 import { handleApplicationErrors } from './middlewares/error.handling.middleware';
 import express, { Request, Response } from 'express';
-import { commentsRouter } from 'routers/comments.router';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app
         res.status(httpStatus.OK).send("OK! 🚀");
     })
     .use('/', usersRouter)
+    .use('/', followsRouter)
     .use('/', commentsRouter)
     .use(handleApplicationErrors);
 
