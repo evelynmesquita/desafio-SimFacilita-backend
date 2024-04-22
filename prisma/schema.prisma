@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -16,45 +19,45 @@ model User {
   email         String    @unique @db.VarChar(255)
   password      String    @db.VarChar(255)
   profileUrl    String
+  Session       Session[]
+  Post          Post[]
   Comment       Comment[]
   FollowedUsers Follow[]  @relation("Followed")
   Followers     Follow[]  @relation("Follower")
-  Post          Post[]
-  Session       Session[]
 }
 
 model Session {
   id        Int      @id @default(autoincrement())
   userId    Int
+   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Follow {
   id         Int  @id @default(autoincrement())
-  followedId Int
   followerId Int
-  Followed   User @relation("Followed", fields: [followedId], references: [id], onDelete: Cascade)
+  followedId Int
   User       User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  Followed   User @relation("Followed", fields: [followedId], references: [id], onDelete: Cascade)
 }
 
 model Post {
   id          Int       @id @default(autoincrement())
   userId      Int
+ User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   description String    @db.VarChar(500)
   createdAt   DateTime  @default(now())
   Comment     Comment[]
-  User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
   postId    Int
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    Int
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comment   String   @db.VarChar(150)
   createdAt DateTime @default(now())
-  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
